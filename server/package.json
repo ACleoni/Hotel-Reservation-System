@@ -1,7 +1,20 @@
 {
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
   "dependencies": {
-    "express": "^4.16.3",
-    "sequelize": "^4.38.0",
-    "sequelize-cli": "^4.1.1"
+    "body-parser": "^1.18.3",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "express-graphql": "^0.6.12",
+    "graphql": "^0.13.2",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.0",
+    "nodemon": "^1.18.3"
   }
 }
