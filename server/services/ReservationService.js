@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { Reservation } = require('../models').sequelize.models;
+const { reservation } = require('../models').sequelize.models;
 const validator = require('validator');
 
 
@@ -17,3 +17,6 @@ class ReservationService
         }
     }
 }
+
+
+

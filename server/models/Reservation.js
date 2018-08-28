@@ -2,12 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Reservation = sequelize.define('reservation', {
-        id:
-        {
-            type: DataTypes.INTEGER,
-            primaryKey: true, 
-            autoIncrement: true
-        },
         username:
         {
             type: DataTypes.STRING,
@@ -41,7 +35,10 @@ module.exports = (sequelize, DataTypes) => {
         {
             type: DataTypes.DATE,
             allowNull: false,
-        }
+        } 
     });
+    Reservation.associate = ((models) => {
+        models.reservation.belongsTo(models.hotel)
+    })
     return Reservation
 }
