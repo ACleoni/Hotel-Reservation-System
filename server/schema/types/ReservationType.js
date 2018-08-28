@@ -3,7 +3,8 @@ const
     GraphQLObjectType,
     GraphQLString,
     GraphQLNonNull,
-    GraphQLInt,
+    GraphQLID,
+    GraphQLBoolean
 } = require('graphql');
 
 const ReservationType = new GraphQLObjectType({
@@ -11,18 +12,23 @@ const ReservationType = new GraphQLObjectType({
     fields: () => ({
         id:
         {
-            type: GraphQLInt,
+            type: GraphQLID,
             resolve: (obj) => obj.id
         },
-        username:
+        firstName:
         {
-            type: new GraphQLNonNull(GraphQLString),
-            resolve: (obj) => obj.username
+            type: GraphQLString,
+            resolve: (obj) => obj.firstName
         },
-        email:
+        lastName:
         {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (obj) => obj.email
+            resolve: (obj) => obj.lastName
+        },
+        hotelName:
+        {
+            type: new GraphQLNonNull(GraphQLString),
+            resolve: (obj) => obj.hotelName
         },
         arrivalDate:
         {
@@ -33,6 +39,11 @@ const ReservationType = new GraphQLObjectType({
         {
             type: new GraphQLNonNull(GraphQLString),
             resolve: (obj) => obj.departureDate
+        },
+        confirmed:
+        {
+            type: new GraphQLNonNull(GraphQLBoolean),
+            resolve: (obj) => obj.confirmed
         }
     })
 })

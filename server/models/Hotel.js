@@ -2,12 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Hotel = sequelize.define('hotel', {
-        id:
-        {
-            type: DataTypes.INTEGER,
-            primaryKey: true, 
-            autoIncrement: true
-        },
         name:
         { 
             type: DataTypes.STRING,
@@ -71,8 +65,5 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: '2018-08-27 13:57:22.282-04'
         }
     });
-    Hotel.associate = ((models) => {
-        models.hotel.hasMany(models.reservation)
-    })
     return Hotel
 }

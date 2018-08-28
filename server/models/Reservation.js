@@ -2,43 +2,40 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Reservation = sequelize.define('reservation', {
-        username:
+        first_name:
         {
             type: DataTypes.STRING,
             allowNull: false
         },
-        email:
+        last_name:
         {
             type: DataTypes.STRING,
-            allowNull: false,
-            validate:
-            {
-                isEmail:
-                {
-                    args: true,
-                    msg: "Please enter a valid email address."
-                }
-            }
+            allowNull: false
         },
-        emailConfirmed:
+        hotel_name:
+        {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        arrival_date:
+        {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        departure_date:
+        {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        confirmed:
         {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
         },
-        arrivalDate:
-        {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
-        departureDate:
-        {
-            type: DataTypes.DATE,
-            allowNull: false,
-        } 
     });
     Reservation.associate = ((models) => {
-        models.reservation.belongsTo(models.hotel)
+        models.reservation.belongsTo(models.user)
     })
     return Reservation
 }

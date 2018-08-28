@@ -23,7 +23,7 @@ app.set('port', port);
 const server = http.createServer(app);
 
 models.sequelize.sync({
-  force: false
+  force: true
 })
 .then(() => {
 /**
