@@ -12,7 +12,7 @@ const UserType = new GraphQLObjectType({
         id:
         {
             type: GraphQLInt,
-            resolve: (obj) => obj.firstName
+            resolve: (obj) => obj.id
         },
         email:
         {
@@ -22,4 +22,4 @@ const UserType = new GraphQLObjectType({
     })
 })
 
-module.exports = UserType
+module.exports = UserType;

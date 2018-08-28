@@ -11,11 +11,11 @@ class UserService
         try
         {
             await _validateEmail(email);
-            const userRecord = await user.create({ 
+            const userRecord = await user.create({
                 email 
             })
             .then(res => {
-                res,dataValues
+                res.dataValues
             })
             return userRecord
         }
