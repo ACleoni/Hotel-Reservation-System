@@ -1,9 +1,12 @@
+const ReservationType = require('./ReservationType')
+
 const
 {
     GraphQLObjectType,
     GraphQLString,
     GraphQLNonNull,
     GraphQLID,
+    GraphQLList
 } = require('graphql');
 
 const UserType = new GraphQLObjectType({
@@ -18,6 +21,11 @@ const UserType = new GraphQLObjectType({
         {
             type: new GraphQLNonNull(GraphQLString),
             resolve: (obj) => obj.email
+        },
+        reservationList:
+        {
+            type: new GraphQLList(ReservationType),
+            resolve: (obj) => obj.reservationList
         }
     })
 })

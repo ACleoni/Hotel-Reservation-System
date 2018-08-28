@@ -42,6 +42,8 @@ class UserService
             .then(res => {
                 res.dataValues
             })
+
+            return reservationRecord
         }
         catch(err)
         {
@@ -55,7 +57,7 @@ class UserService
         {
             const reservationRecord = await reservation.findById(id);
             if (reservationRecord === null) throw "No ID found for requested reservation."
-            return id
+            return reservationRecord
         }
         catch(err)
         {
@@ -67,17 +69,23 @@ class UserService
     {
         try
         {
-            const reservationRecord = await reservation.findOne({
+            const reservationRecord = await user.findOne({
+                include: [
+                    {
+                        model: reservation
+                    }
+                ],
                 where:
                 {
                     email
                 }
             })
-            .then(reservations => {
-                console.log(reservations);
+            .then(res => {
+                return {...res.reservations}
             })
             
             if (!reservationRecord) throw "No reservations found.";
+            return reservationRecord
         }
         catch(err)
         {
