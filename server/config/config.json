@@ -2,21 +2,21 @@
   "development": {
     "username": "alexandercleoni",
     "password": null,
-    "database": "hotel_reservations",
+    "database": "hotel_database",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "root",
     "password": null,
-    "database": "database_test",
+    "database": "hotel_database",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
     "username": "root",
     "password": null,
-    "database": "database_production",
+    "database": "hotel_database",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
