@@ -3,7 +3,7 @@ const
     GraphQLObjectType,
     GraphQLString,
     GraphQLNonNull,
-    GraphQLInt,
+    GraphQLID,
 } = require('graphql');
 
 const UserType = new GraphQLObjectType({
@@ -11,7 +11,7 @@ const UserType = new GraphQLObjectType({
     fields: () => ({
         id:
         {
-            type: GraphQLInt,
+            type: GraphQLID,
             resolve: (obj) => obj.id
         },
         email:

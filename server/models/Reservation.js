@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
-        },
+        }
     });
     Reservation.associate = ((models) => {
         models.reservation.belongsTo(models.user)

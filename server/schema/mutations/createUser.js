@@ -2,8 +2,7 @@ const UserService = require('../../service/UserService');
 const { UserType } = require('../types');
 
 const {
-    GraphQLString,
-    GraphQLID
+    GraphQLString
 } = require('graphql');
 
 module.exports = {

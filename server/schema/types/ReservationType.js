@@ -17,7 +17,7 @@ const ReservationType = new GraphQLObjectType({
         },
         firstName:
         {
-            type: GraphQLString,
+            type: new GraphQLNonNull(GraphQLString),
             resolve: (obj) => obj.firstName
         },
         lastName:

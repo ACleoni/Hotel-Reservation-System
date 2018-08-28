@@ -2,13 +2,13 @@ const UserService = require("../../service/UserService");
 const { ReservationType } = require('../types');
 const
 {
-    GraphQLInt
+    GraphQLID
 } = require('graphql');
 
 module.exports = {
     type: ReservationType,
-    resolve: async(obj, args, { reservation }) => {
-        if (!reservation)
+    resolve: async({id: {reservation}}) => {
+        if (!id)
         {
             throw Error("Unauthorized request.")
         }

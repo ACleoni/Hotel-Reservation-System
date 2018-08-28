@@ -25,23 +25,23 @@ class UserService
         }
     }
 
-    async _createReservation(firstName, lastName, hotelname, arrivalDate, departureDate, confirmed)
+    async _createReservation(firstName, lastName, hotelName, arrivalDate, departureDate, confirmed, userId)
     {
         try
         {
-            await _validateRequest(firstName, lastName, hotelname, arrivalDate, departureDate, confirmed);
+            await _validateRequest(firstName, lastName, hotelName, arrivalDate, departureDate, confirmed, userId);
             const reservationRecord = await reservation.create({
-                firstName, 
-                lastName, 
-                hotelname, 
-                arrivalDate, 
-                departureDate, 
-                confirmed: false
+                first_name: firstName, 
+                last_name: lastName, 
+                hotel_name: hotelName, 
+                arrival_date: arrivalDate, 
+                departure_date: departureDate, 
+                confirmed: false,
+                userId: userId
             })
             .then(res => {
                 res.dataValues
             })
-            return reservationRecord
         }
         catch(err)
         {
@@ -54,8 +54,8 @@ class UserService
         try
         {
             const reservationRecord = await reservation.findById(id);
-            if (!reservationRecord) throw "No ID found for requested reservation."
-            return reservationRecord.dataValues;
+            if (reservationRecord === null) throw "No ID found for requested reservation."
+            return id
         }
         catch(err)
         {
