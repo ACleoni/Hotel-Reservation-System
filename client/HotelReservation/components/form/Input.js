@@ -7,8 +7,8 @@ import
 } from 'react-native';
 
 // Functions
-const Utils = require('../../service');
-const { inheritPropStyles } = Utils;
+const Service = require('../../service');
+const { inheritPropStyles } = Service;
 
 class Input extends Component
 {
@@ -26,8 +26,7 @@ class Input extends Component
             styles.input,
             inheritPropStyles([
                 'width', 
-                this.props
-            ])
+            ], this.props)
         ];
 
         return <TextInput
