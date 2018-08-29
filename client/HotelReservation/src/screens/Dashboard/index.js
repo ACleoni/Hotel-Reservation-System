@@ -1,10 +1,11 @@
 import React from 'react'
 import { createBottomTabNavigator } from 'react-navigation';
-import { Icon } from 'react-native-elements';
 
-import { Home, Reservations } from './Views';
+import { Feed, Reservations } from './Views';
 
-const Home = createBottomTabNavigator({
+import Icon from 'react-native-vector-icons/Feather'
+
+const Dashboard = createBottomTabNavigator({
     Feed: {screen: Feed,
     navigationOptions: {
         tabBarLabel: 'Hotel List',
@@ -17,4 +18,4 @@ const Home = createBottomTabNavigator({
     },   
 })
 
-export default Home;
+export default Dashboard;

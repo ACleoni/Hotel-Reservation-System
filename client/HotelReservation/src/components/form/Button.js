@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         paddingBottom: 16,
         paddingLeft: 47,
         paddingRight: 47,
-        backgroundColor: '#80CC28',
+        backgroundColor: 'black',
         borderRadius: 5,
         alignItems: 'stretch',
         shadowColor: '#000',
