@@ -8,7 +8,7 @@ import
 
 // Functions
 const Service = require('../../service');
-const { inheritPropStyles } = Service;
+const { _inheritPropStyles } = Service;
 
 class Input extends Component
 {
@@ -24,8 +24,9 @@ class Input extends Component
     {
         const style = [
             styles.input,
-            inheritPropStyles([
-                'width', 
+            _inheritPropStyles([
+                'width',
+                'marginTop'
             ], this.props)
         ];
 
@@ -34,12 +35,14 @@ class Input extends Component
                     value={this.props.value}
                     keyboardType={this.props.keyboardType}
                     placeholder={this.props.placeholder}
+                    placeholderTextColor={'#000'}
                     onFocus={this.props.onFocus}
                     onBlur={this.props.onBlur}
                     onKeyPress={this.onKeyPress}
                     onChangeText={this.props.onChangeText}
                     secureTextEntry={this.props.secureTextEntry}
                     underlineColorAndroid={'rgba(0,0,0,0)'}
+                    style={style}
                 />
     }
 
@@ -47,20 +50,20 @@ class Input extends Component
     {
         const style = [
             styles.inputContainer,
-            inheritPropStyles([
+            _inheritPropStyles([
                 'marginTop',
                 this.props
             ])
         ]
 
         return <View style={style}>
-                    {this._renderTextInput}
+                    {this._renderTextInput()}
                 </View>
     }
 
     render()
     {
-        return this._renderInputContainer
+        return this._renderInputContainer()
     }
 }
 
@@ -76,7 +79,9 @@ const styles = StyleSheet.create({
     {
         height: 45.76,
         width: 297.74,
-        color: 'grey',
+        color: 'black',
+        borderColor: 'grey',
+        borderWidth: 1,
         backgroundColor: 'white',
         borderRadius: 5,
         fontSize: 14,
@@ -85,3 +90,5 @@ const styles = StyleSheet.create({
         paddingLeft: 13
     }
 });
+
+export default Input

@@ -11,7 +11,7 @@ class UserService
         try
         {
             await _validateEmail(email);
-            const userRecord = await user.create({
+            const userRecord = await user.findOrCreate({
                 email 
             })
             .then(res => res.dataValues)

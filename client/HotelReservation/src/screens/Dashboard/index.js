@@ -9,12 +9,12 @@ const Dashboard = createBottomTabNavigator({
     Feed: {screen: Feed,
     navigationOptions: {
         tabBarLabel: 'Hotel List',
-        tabBarIcon: <Icon name ="map" size={35} color='lightskyblue'  /> }
+        tabBarIcon: <Icon name ="map" size={35} color='#3ab71d'  /> }
     },
     Reservations: {screen: Reservations,
     navigationOptions: {
         tabBarLabel: 'My Reservations',
-        tabBarIcon: <Icon name ="list" size={35} color='lightskyblue'   /> }
+        tabBarIcon: <Icon name ="list" size={35} color='#3ab71d'   /> }
     },   
 })
 

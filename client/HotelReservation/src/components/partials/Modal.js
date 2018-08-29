@@ -1,21 +1,40 @@
-import React, {Component} from 'react';
+import React, 
+{
+    Component
+} from 'react';
+
 import 
 {
     Dimensions,
+    StyleSheet,
     DatePickerIOS,
     View,
     ScrollView,
     Modal,
     Text,
-    TouchableOpacity,
-} from 'react-native'
+} from 'react-native';
+
+import Input  from '../form/Input';
+import Button  from '../form/Button';
 
 const { width, height } = Dimensions.get('window');
 
-import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default class ModalViews extends Component {
-    render() {
+class ModalView extends Component 
+{
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+            arrival: new Date(),
+            departure: new Date(),
+            firstName: '',
+            lastname: '',
+            email: '',
+        }
+    }
+    render() 
+    {
         return (
             <Modal
                     animationType="fade"
@@ -24,77 +43,39 @@ export default class ModalViews extends Component {
                     onRequestClose={this._handleCloseModal}
                     presentationStyle={"overFullScreen"}
             >
-                <View style={{backgroundColor: '#000', height: height, width: width, alignItems: 'center', justifyContent: 'space-around'}}>
-                    <Logo marginTop={23} />
+                <View style={{backgroundColor: 'rgba(0, 0, 0, 0.2)', height: height, width: width, alignItems: 'center', justifyContent: 'space-around'}}>
                     <View style={{height: height / 1.2, width: width / 1.1, backgroundColor: '#fff', borderRadius: 10}}>
                         <ScrollView>
-
+                            <View style={styles.header}>
+                                <Text style={styles.headerText}>Reservation for Hilton Hotel</Text>
+                            </View>
                             {/* User Info */}
                             <View style={{marginTop: 3}}>
-                                <Text style={styles.label}>Details</Text>
+                                
                                 <Input
                                     placeholder="First Name"
-                                    borderColor='grey'
-                                    borderWidth={1}
                                 />
                                 <Input 
                                     placeholder={"Last Name"}
-                                    borderColor='grey'
-                                    borderWidth={1}
+                                    marginTop={13}
                                 />
                                 <Input 
                                     placeholder={"Email Address"}
-                                    borderColor='grey'
-                                    borderWidth={1}
+                                    marginTop={23}
                                 />
+                                <Text style={styles.label}>Date of Arrival</Text>
                                 <DatePickerIOS 
-                                    
+                                    date={this.state.arrival}
+                                    mode={'date'}
                                 />
+                                <Text style={styles.label}>Date of Arrival</Text>
                                 <DatePickerIOS 
-
-                                />
-                            </View>
-
-                            {/* Payment Info */}
-                            <View style={{marginTop: 23}}>
-                                <Text style={styles.label}>Payment Information</Text>
-                                <Input
-                                    placeholder={'Card Number'}
-                                    borderColor='grey'
-                                    borderWidth={1}
-                                />
-                                <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <Input
-                                        placeholder={'CVC'}
-                                        borderColor='grey'
-                                        borderWidth={1}
-                                        width={100}
-                                    />
-                                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
-                                    <Input
-                                        placeholder={'MM'}
-                                        borderColor='grey'
-                                        borderWidth={1}
-                                        width={50}
-                                    />
-                                    <View style={{height: 3, width: 10, backgroundColor: 'lightgrey', opacity: 1, margin: 3}}></View>
-                                    <Input
-                                        placeholder={'YY'}
-                                        borderColor='grey'
-                                        borderWidth={1}
-                                        width={50}
-                                    />
-                                    </View>
-                                </View>
-                                <Input
-                                        placeholder={'Name On Card'}
-                                        borderColor='grey'
-                                        borderWidth={1}
-                                        
+                                    date={this.state.departure}
+                                    mode={'date'}
                                 />
                             </View>
                             <View style={{marginTop: 23, marginBottom: 23}}>
-                                <Button onPress={() => this.props.navigation.navigate('Login')}>Submit</Button>
+                                <Button onPress={() => this.props.navigation.navigate('Home')}>Confirm</Button>
                             </View>
                         </ScrollView>
                     </View>
@@ -103,3 +84,27 @@ export default class ModalViews extends Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    header: 
+    {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 25,
+    },
+    headerText: 
+    {
+        fontSize: 20,
+        fontWeight: '600'
+    },
+    label: {
+        paddingLeft: 35,
+        fontSize: 14,
+        marginTop: 33,
+        color: 'black'
+    }
+
+})
+
+export default ModalView

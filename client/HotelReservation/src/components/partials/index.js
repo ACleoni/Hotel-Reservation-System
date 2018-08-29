@@ -1,11 +1,15 @@
 import BackgroundWrapper from './BackgroundWrapper';
+import ModalView from './Modal';
+
 
 export 
 {
-    BackgroundWrapper
+    BackgroundWrapper,
+    ModalView
 }
 
 export default 
 {
-    BackgroundWrapper
+    BackgroundWrapper,
+    ModalView
 }

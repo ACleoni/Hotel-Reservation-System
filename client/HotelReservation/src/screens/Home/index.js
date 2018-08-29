@@ -29,9 +29,10 @@ class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         backgroundColor: '#fff',
+        paddingBottom: 100
     }
 });
 

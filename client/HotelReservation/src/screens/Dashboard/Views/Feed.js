@@ -13,20 +13,57 @@ import
     TouchableOpacity
 } from 'react-native';
 
+import { ModalView }  from '../../../components/partials';
 
-class Feed extends Component {
+import {gql} from 'apollo-boost';
+import {graphql} from 'react-apollo'
+
+const getHotelListQuery = gql`
+    {
+        hotels {
+            name
+        }
+    }
+`
+
+class Feed extends Component 
+{
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+            modalVisible: false
+        }
+        this._handleCloseModal = this._handleCloseModal.bind(this);
+        this._handleModalVisible=this._handleModalVisible.bind(this);
+    }
+
 
     static navigationOptions = {
         header: null
     }
 
-    componentDidMount() {
-        // this.animation.play();
+    _handleCloseModal()
+    {
+
+    }
+
+    _handleModalVisible() 
+    {
+        this.setState({
+            modalVisible: true
+        })
+    };
+
+    componentDidMount() 
+    {
+        console.log(this.props);
     }
 
     render() {
         return (
             <View style={styles.container}>
+                <ModalView visible={this.state.modalVisible} _handleCloseModal={this._handleCloseModal} />
                 <ScrollView> 
                     <View style={styles.cardSection}>
                         <View style={{height: 100, width: '100%', flexDirection: 'row', alignItems: 'flex-start', paddingLeft: 5}}>
@@ -44,7 +81,7 @@ class Feed extends Component {
                                     <Text style={{ fontSize: 22, color: 'black', marginTop: 1, paddingTop: 2}}>$100</Text>
                                     <Text style={{ fontSize: 14, color: 'black', marginTop: 1}}>Avg price per night</Text>
                                 </View>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={this._handleModalVisible}>
                                     <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#3ab71d', flex: 0, borderRadius: 0, width: 120, height: 30, borderRadius: 5}}>
                                         <Text style={{fontSize: 14, color: '#fff'}}>
                                             Reserve Now
@@ -81,4 +118,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Feed
+export default graphql(getHotelListQuery)(Feed);
