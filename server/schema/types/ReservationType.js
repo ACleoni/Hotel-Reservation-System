@@ -18,27 +18,30 @@ const ReservationType = new GraphQLObjectType({
         firstName:
         {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (obj) => obj.firstName
+            resolve: (obj) => {
+                console.log(obj)
+                return obj.first_name
+            }
         },
         lastName:
         {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (obj) => obj.lastName
+            resolve: (obj) => obj.last_name
         },
         hotelName:
         {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (obj) => obj.hotelName
+            resolve: (obj) => obj.hotel_name
         },
         arrivalDate:
         {
             type:  new GraphQLNonNull(GraphQLString),
-            resolve: (obj) => obj.arrivalDate
+            resolve: (obj) => obj.arrival_date
         },
         departureDate:
         {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (obj) => obj.departureDate
+            resolve: (obj) => obj.departure_date
         },
         confirmed:
         {
