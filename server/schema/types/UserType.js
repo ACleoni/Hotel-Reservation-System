@@ -25,7 +25,7 @@ const UserType = new GraphQLObjectType({
         reservationList:
         {
             type: new GraphQLList(ReservationType),
-            resolve: (obj) => obj.reservationList
+            resolve: (obj) => obj
         }
     })
 })

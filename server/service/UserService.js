@@ -14,9 +14,7 @@ class UserService
             const userRecord = await user.create({
                 email 
             })
-            .then(res => {
-                res.dataValues
-            })
+            .then(res => res.dataValues)
             return userRecord
         }
         catch(err)
@@ -65,25 +63,26 @@ class UserService
         }
     }
 
-    async _getAllReservationsByEmail(email)
+    async _getAllReservationsByEmail(userId)
     {
         try
         {
-            const reservationRecord = await user.findOne({
-                include: [
-                    {
-                        model: reservation
-                    }
-                ],
+            const reservationRecord = await reservation.findAll({
                 where:
                 {
-                    email
+                    userId
                 }
             })
             .then(res => {
-                return {...res.reservations}
-            })
-            
+                return new Promise((resolve, reject) => {
+                    let reservationList = [];
+                    for(let i=0; i < res.length; i++) 
+                    {
+                        reservationList.push(res[i].dataValues);
+                        if (i == res.length - 1) resolve(reservationList);
+                    }
+                });
+            })       
             if (!reservationRecord) throw "No reservations found.";
             return reservationRecord
         }

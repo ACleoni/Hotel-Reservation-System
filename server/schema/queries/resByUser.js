@@ -2,29 +2,22 @@ const UserService = require("../../service/UserService");
 const { UserType } = require('../types');
 const
 {
-    GraphQLString
+    GraphQLString,
+    GraphQLID
 } = require('graphql');
 
 module.exports = {
     type: UserType,
     args: 
     { 
-        email: 
+        id: 
         { 
-            type: GraphQLString 
+            type: GraphQLID
         } 
     },
-    resolve: async(obj, { email }, { res }) => {
-        if (!email)
-        {
-            throw Error("User does not exist.")
-        }
-        const {
-            reservationList
-        } = await UserService._getAllReservationsByEmail(email)
-        .then(res, reservationList => {
-            res.send(reservationList)
-        })
+    resolve: async(obj, { id }, { res }) => {
+        const reservationList = await UserService._getAllReservationsByEmail(id);
+        return reservationList;
     
     }
 }
