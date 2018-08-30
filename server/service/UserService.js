@@ -1,5 +1,5 @@
 var crypto = require('crypto');
-const { user, reservation } = require('../models').sequelize.models;
+const { user, reservation, hotel } = require('../models').sequelize.models;
 const validator = require('validator');
 
 
@@ -91,6 +91,33 @@ class UserService
             throw err
         }
     }
+
+    async _getHotels(city)
+    {
+        try
+        {
+            const hotelRecord = await hotel.findAll({
+                where: {
+                    city
+                }
+            })
+            .then(res => {
+                return new Promise((resolve, reject) => {
+                    let hotelList = [];
+                    for (let i=0; i < res.length; i++)
+                    {
+                        hotelList.push(res[i].dataValues);
+                        if ( i == res.length -1) resolve(hotelList)
+                    }
+                })
+            })
+            return hotelRecord
+        }
+        catch(err)
+        {
+            throw err
+        }
+    }
 }
 
 
@@ -114,15 +141,5 @@ const _validateRequest = (firstName, lastName, hotelName, arrivalDate, departure
         resolve();
     })
 };
-
-// After user successfully makes a reservation, a confirmation link is sent to their email to confirm the reservation
-const _generateConfirmationToken = () => {
-    return new Promise((resolve, reject) => {
-        crypto.randomBytes(32, (err, buf) => {
-            if (err) reject(err);
-            resolve(buf.toString('hex'));
-        });
-    });
-}
 
 module.exports = (new UserService());

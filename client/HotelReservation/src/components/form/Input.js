@@ -35,7 +35,7 @@ class Input extends Component
                     value={this.props.value}
                     keyboardType={this.props.keyboardType}
                     placeholder={this.props.placeholder}
-                    placeholderTextColor={'#000'}
+                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                     onFocus={this.props.onFocus}
                     onBlur={this.props.onBlur}
                     onKeyPress={this.onKeyPress}
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         height: 45.76,
         width: 297.74,
         color: 'black',
-        borderColor: 'grey',
+        borderColor: 'rgba(0, 0, 0, 0.2)',
         borderWidth: 1,
         backgroundColor: 'white',
         borderRadius: 5,

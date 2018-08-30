@@ -15,8 +15,8 @@ import
 
 import { ModalView }  from '../../../components/partials';
 
-import {gql} from 'apollo-boost';
-import {graphql} from 'react-apollo'
+import { gql } from 'apollo-boost';
+import { graphql } from 'react-apollo'
 
 const getHotelListQuery = gql`
     {
