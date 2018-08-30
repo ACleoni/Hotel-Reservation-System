@@ -1,6 +1,6 @@
-var crypto = require('crypto');
-const { user, reservation } = require('../models').sequelize.models;
+const { user, reservation, hotel } = require('../models').sequelize.models;
 const validator = require('validator');
+const compare = require('compare-lat-lon');
 
 
 
@@ -91,6 +91,36 @@ class UserService
             throw err
         }
     }
+
+    async _getHotels(lat, lon)
+    {
+        try
+        {
+            const hotelRecord = await hotel.findAll({
+                
+            })
+            .then(res => {
+                return new Promise((resolve, reject) => {
+                    let hotelList = []
+                    for (let i=0; i < res.length; i++)
+                    {
+                        // This function loops through all hotels
+                        // compares distances between the users location and the hotels location
+                        // and only returns hotels within 20 km or approximately 10 - 12 miles of the users location 
+                        if (compare(lat, lon, res[i].dataValues.latitude, res[i].dataValues.longitude) < 20) {
+                            hotelList.push(res[i].dataValues);
+                        }
+                        if ( i == res.length -1) resolve(hotelList)
+                    }
+                })
+            })
+            return hotelRecord
+        }
+        catch(err)
+        {
+            throw err
+        }
+    }
 }
 
 
@@ -101,7 +131,7 @@ const _validateEmail = (email) => {
         if (!validator.isEmail(String(email))) reject("Email is invalid. Please try again.");
         resolve()
     })
-}
+};
 
 // Validates a request to make a reservation to ensure all fields are filled out properly
 const _validateRequest = (firstName, lastName, hotelName, arrivalDate, departureDate) => {
@@ -114,15 +144,5 @@ const _validateRequest = (firstName, lastName, hotelName, arrivalDate, departure
         resolve();
     })
 };
-
-// After user successfully makes a reservation, a confirmation link is sent to their email to confirm the reservation
-const _generateConfirmationToken = () => {
-    return new Promise((resolve, reject) => {
-        crypto.randomBytes(32, (err, buf) => {
-            if (err) reject(err);
-            resolve(buf.toString('hex'));
-        });
-    });
-}
 
 module.exports = (new UserService());

@@ -18,6 +18,5 @@ module.exports = {
     resolve: async(obj, { id }, { res }) => {
         const reservationList = await UserService._getAllReservationsByEmail(id);
         return reservationList;
-    
     }
 }
