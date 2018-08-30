@@ -9,13 +9,18 @@ module.exports = {
     type: HotelListType,
     args: 
     { 
-        city: 
+        latitude: 
         { 
             type: GraphQLString
-        } 
+        },
+        longitude:
+        {
+            type: GraphQLString
+        }
+
     },
-    resolve: async(obj, { city }, { res }) => {
-        const hotelList = await UserService._getHotels(city) 
+    resolve: async(obj, { latitude, longitude }, { res }) => {
+        const hotelList = await UserService._getHotels(latitude, longitude) 
         return hotelList
     }
 }
