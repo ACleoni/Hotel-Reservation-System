@@ -34,7 +34,7 @@ class TextStyle extends Component
 };
 
 TextStyle.defaultProps = {
-    fontFamily: 'Helvetica',
+    fontFamily: 'Arial',
     fontWeight: '400',
     color: '#fff'
 }

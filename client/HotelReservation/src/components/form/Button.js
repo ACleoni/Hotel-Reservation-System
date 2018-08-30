@@ -23,7 +23,10 @@ class Button extends Component
             ..._inheritPropStyles([
                 'marginTop', 
                 'width', 
-                'flex', 
+                'flex',
+                'backgroundColor',
+                'paddingLeft',
+                'paddingRight'
                 ], this.props)
         };
 

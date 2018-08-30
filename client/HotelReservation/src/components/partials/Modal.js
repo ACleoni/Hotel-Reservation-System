@@ -19,6 +19,29 @@ import Button  from '../form/Button';
 
 const { width, height } = Dimensions.get('window');
 
+import { gql } from 'apollo-boost';
+import { Mutation } from 'react-apollo'
+
+/* This query is resposible for retrieving hotels within 10 - 12 miles of the users
+    location using the geolocation api that is built into react native for iOS and 
+    comparing the coordinates of the user to the coordinates of each hotel.
+    By doing so each hotel is filtered and only the hotels that match the distance requirements are
+    rendered in the scrollview. 
+*/
+const createReservation = gql`
+    mutation ($latitude: String!, $longitude: String!) {
+        hotelByCoord(latitude: $latitude, longitude: $longitude) {
+            hotelList {
+                id
+                name
+                city
+                state
+                availRooms
+                startingPrice
+            }
+        }
+    }
+`
 
 class ModalView extends Component 
 {
@@ -29,7 +52,7 @@ class ModalView extends Component
             arrival: new Date(),
             departure: new Date(),
             firstName: '',
-            lastname: '',
+            lastName: '',
             email: '',
         }
     }
@@ -44,19 +67,25 @@ class ModalView extends Component
                     presentationStyle={"overFullScreen"}
             >
                 <View style={{backgroundColor: 'rgba(0, 0, 0, 0.2)', height: height, width: width, alignItems: 'center', justifyContent: 'space-around'}}>
-                    <View style={{height: height / 1.2, width: width / 1.1, backgroundColor: '#fff', borderRadius: 10}}>
+                    <View style={{height: height / 1.2, width: width / 1.05, backgroundColor: '#fff', borderRadius: 10}}>
                         <ScrollView>
                             <View style={styles.header}>
-                                <Text style={styles.headerText}>Reservation for Hilton Hotel</Text>
+                                <Text style={styles.headerText}>Reservation for {this.props.hotelName}</Text>
                             </View>
                             {/* User Info */}
                             <View style={{marginTop: 3}}>
                                 
                                 <Input
                                     placeholder="First Name"
+                                    value={this.state.firstName}
+                                    name={'firstName'}
+                                    onChange={(event) => this._handleChangeInput(event, 'firstName')}
                                 />
                                 <Input 
                                     placeholder={"Last Name"}
+                                    value={this.state.lastName}
+                                    name={'password'}
+                                    onChange={(event) => this._handleChangeInput(event, 'password')}
                                     marginTop={13}
                                 />
                                 <Input 
@@ -74,8 +103,25 @@ class ModalView extends Component
                                     mode={'date'}
                                 />
                             </View>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                             <View style={{marginTop: 23, marginBottom: 23}}>
-                                <Button onPress={() => this.props.navigation.navigate('Home')}>Confirm</Button>
+                                <Button onPress={() => this.props._handleCloseModal()} 
+                                        backgroundColor={'red'}
+                                        width={125}
+                                        paddingLeft={5}
+                                        paddingRight={5}
+                                    
+                                >Cancel 
+                                </Button>
+                            </View>
+                            <View style={{marginTop: 23, marginBottom: 23}}>
+                                <Button onPress={() => this.props.navigation.navigate('Home')}
+                                        width={125}
+                                        paddingLeft={5}
+                                        paddingRight={5}
+                                >Confirm
+                                </Button>
+                            </View>
                             </View>
                         </ScrollView>
                     </View>

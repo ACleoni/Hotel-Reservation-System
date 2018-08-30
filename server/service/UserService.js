@@ -12,7 +12,10 @@ class UserService
         {
             await _validateEmail(email);
             const userRecord = await user.findOrCreate({
-                email 
+                where: 
+                { 
+                    email 
+                }
             })
             .then(res => res.dataValues)
             return userRecord
