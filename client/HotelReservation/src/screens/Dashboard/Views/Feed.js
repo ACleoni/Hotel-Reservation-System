@@ -9,7 +9,8 @@ import
     Dimensions,
     View, 
     ScrollView, 
-    Text, 
+    Text,
+    ActivityIndicator,
     StyleSheet, 
     TouchableOpacity
 } from 'react-native';
@@ -85,9 +86,9 @@ class Feed extends Component
             {({ loading, error, data, refetch, networkStatus }) => {
             if (loading) {
                 // console.log(data)
-                return <View>
-                    <Text>loading</Text>
-                </View>
+                return <View style={styles.loaderContainer}>
+                            <ActivityIndicator size="large" color="#000" />
+                        </View>
             } else
                 return data.hotelByCoord.hotelList.map((hotel, index) => {
                     return (
@@ -165,6 +166,12 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#fff',
+    },
+    loaderContainer: {
+        height: height / 1.1,
+        width: width / 1.1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     cardContainer: {
         flex: 1,

@@ -113,7 +113,7 @@ class ModalView extends Component
             }
         }).then(res => {
             console.log(res)
-            Alert.alert(`Your reservation of id `)
+            Alert.alert(`Your reservation of id ${res.id} `)
         }).catch(err => {
             err
             Alert.alert(err.message)
