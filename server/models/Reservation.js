@@ -2,27 +2,27 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Reservation = sequelize.define('reservation', {
-        first_name:
+        firstName:
         {
             type: DataTypes.STRING,
             allowNull: false
         },
-        last_name:
+        lastName:
         {
             type: DataTypes.STRING,
             allowNull: false
         },
-        hotel_name:
+        hotelName:
         {
             type: DataTypes.STRING,
             allowNull: false
         },
-        arrival_date:
+        arrivalDate:
         {
             type: DataTypes.DATE,
             allowNull: false
         },
-        departure_date:
+        departureDate:
         {
             type: DataTypes.DATE,
             allowNull: false,

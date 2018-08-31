@@ -12,9 +12,12 @@ class UserService
         {
             await _validateEmail(email);
             const userRecord = await user.findOrCreate({
-                email 
+                where: 
+                {   
+                    email 
+                }
             })
-            .then(res => res.dataValues)
+            .then(res => res[0].dataValues)
             return userRecord
         }
         catch(err)
@@ -29,18 +32,15 @@ class UserService
         {
             await _validateRequest(firstName, lastName, hotelName, arrivalDate, departureDate, confirmed, userId);
             const reservationRecord = await reservation.create({
-                first_name: firstName, 
-                last_name: lastName, 
-                hotel_name: hotelName, 
-                arrival_date: arrivalDate, 
-                departure_date: departureDate, 
-                confirmed: false,
+                firstName: firstName, 
+                lastName: lastName, 
+                hotelName: hotelName, 
+                arrivalDate: arrivalDate, 
+                departureDate: departureDate, 
+                confirmed: true,
                 userId: userId
             })
-            .then(res => {
-                res.dataValues
-            })
-
+            .then(res => res.dataValues)
             return reservationRecord
         }
         catch(err)
@@ -137,7 +137,7 @@ const _validateEmail = (email) => {
 const _validateRequest = (firstName, lastName, hotelName, arrivalDate, departureDate) => {
     return new Promise((resolve, reject) => {
         if (!firstName) reject("Please enter your first name.");
-        if (!lastName) reject("Please enter your first name.");
+        if (!lastName) reject("Please enter your last name.");
         if (!hotelName) reject("Please enter the name of the hotel you would like to reserve.");
         if (!arrivalDate) reject("Please enter a date of arrival.");
         if (!departureDate) reject("Please enter a date of return.");
