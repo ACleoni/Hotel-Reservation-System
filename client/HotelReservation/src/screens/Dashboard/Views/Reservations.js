@@ -1,29 +1,68 @@
 
 import React, {Component} from 'react';
-import {View, Text, Input, StyleSheet, TouchableOpacity} from 'react-native';
-import {BackgroundWrapper} from '../../../components/partials';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import  {Button, FormInput} from 'react-native-elements';
 
-class Reservations extends Component {
-    static navigationOptions = {
-        header: null
+import { gql } from 'apollo-boost';
+import { graphql, compose } from 'react-apollo';
+
+
+const getReservationById = gql `
+query ResById($id: String!){
+	resById(id: $id) 
+    {
+        id
+        firstName
+        lastName
+        hotelName
+        arrivalDate
+        departureDate
     }
-    componentDidMount() {
+}
+`
+
+class Reservations extends Component 
+{
+    constructor(props)
+        {
+            super(props);
+            this.state = {
+                value: ''
+            }
+            this._handleChange = this._handleChange.bind(this);
+            this._checkValue = this._checkValue.bind(this);
+        }
+    
+    _handleChange(event , target) 
+    {
+        this.setState({[target]: event})
+    }
+
+    _checkValue()
+    {
+        let atSign = '@';
+        this.state.value.includes(atSign) ? this._renderReservationsByEmail() : this._renderReservationByID();
+    }
+
+    componentDidMount() 
+    {
         // this.animation.play();
     }
 
     render() {
         return (
-            // <BackgroundWrapper style={styles.container}>
             <View>
-
+                <FormInput
+                    value={this.state.value}
+                    onSubmitEditing={this._checkValue}
+                    onChangeText={(event) => this._handleChange(event, 'value')}
+                />
             </View>
-                // <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
-                //     <Text style={{position: 'absolute', top: 404, fontSize: 18, fontWeight: 'bold', color: '#ad5f43'}}>Get Started</Text>
-                // </TouchableOpacity>
-            // </BackgroundWrapper>
         );
     }
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -44,4 +83,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Reservations
+export default compose(
+    graphql(getReservationById, {name: 'ResById'}),
+    // graphql(ReservationsByEmail, {name: 'ReservationByEmail'})
+)(Reservations)

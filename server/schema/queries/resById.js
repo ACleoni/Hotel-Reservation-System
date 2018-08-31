@@ -21,22 +21,22 @@ module.exports = {
         }
             const 
             {
-                first_name, 
-                last_name, 
-                hotel_name,
-                arrival_date,
-                departure_date,
+                firstName, 
+                lastName, 
+                hotelName,
+                arrivalDate,
+                departureDate,
                 confirmed
             } = await UserService._getReservationById(id) 
 
         return {
             id,
-            firstName: first_name,
-            lastName: last_name,
-            hotelName: hotel_name,
-            arrivalDate: arrival_date,
-            departureDate: departure_date,
-            confirmed: confirmed,
+            firstName,
+            lastName ,
+            hotelName,
+            arrivalDate ,
+            departureDate,
+            confirmed,
         }      
     }
 }

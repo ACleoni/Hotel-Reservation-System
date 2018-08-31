@@ -4,7 +4,8 @@ const { ReservationType } = require('../types');
 const {
     GraphQLString,
     GraphQLBoolean,
-    GraphQLInt
+    GraphQLInt,
+    GraphQLID
 } = require('graphql');
 
 module.exports = {
@@ -40,11 +41,12 @@ module.exports = {
             type: GraphQLInt
         }
     },
-    resolve: async(obj, { firstName, lastName, hotelName, arrivalDate, departureDate, confirmed, userId }, { res }) => {
+    resolve: async(obj, {firstName, lastName, hotelName, arrivalDate, departureDate, confirmed, userId }, { res }) => {
         try 
         {
-            await UserService._createReservation(firstName, lastName, hotelName, arrivalDate, departureDate, confirmed, userId);
+            const { id } = await UserService._createReservation(firstName, lastName, hotelName, arrivalDate, departureDate, confirmed, userId);
             return { 
+                        id,
                         firstName, 
                         lastName, 
                         hotelName, 

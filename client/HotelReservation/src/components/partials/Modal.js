@@ -12,6 +12,7 @@ import
     ScrollView,
     Modal,
     Text,
+    Alert
 } from 'react-native';
 
 import Input  from '../form/Input';
@@ -20,25 +21,51 @@ import Button  from '../form/Button';
 const { width, height } = Dimensions.get('window');
 
 import { gql } from 'apollo-boost';
-import { Mutation } from 'react-apollo'
+import { graphql, compose } from 'react-apollo';
 
-/* This query is resposible for retrieving hotels within 10 - 12 miles of the users
-    location using the geolocation api that is built into react native for iOS and 
-    comparing the coordinates of the user to the coordinates of each hotel.
-    By doing so each hotel is filtered and only the hotels that match the distance requirements are
-    rendered in the scrollview. 
+/* The User and Reservation queries handle th creation new reservations as well as the creation of e new user
+    by email if one does not alreay exist. IF user already exists, a new reservation will
+    be created and assigned to the users Id.  
 */
-const createReservation = gql`
-    mutation ($latitude: String!, $longitude: String!) {
-        hotelByCoord(latitude: $latitude, longitude: $longitude) {
-            hotelList {
-                id
-                name
-                city
-                state
-                availRooms
-                startingPrice
-            }
+const User = gql`
+    mutation ($email: String!) 
+    {
+        createUser(email: $email) 
+        {
+            id
+            email
+        }
+    }
+`
+
+const Reservation = gql`
+    mutation ($firstName: String!, 
+                $lastName: String!, 
+                $hotelName: String!, 
+                $arrivalDate: String!, 
+                $departureDate: String!
+                $confirmed: Boolean!
+                $userId: Integer!
+            ) 
+        {
+        createReservation(
+            firstName: $firstName, 
+            lastName: $lastName, 
+            hotelName: $hotelName, 
+            arrivalDate: $arrivalDate, 
+            departureDate: $departureDate
+            confirmed: $confirmed
+            userId: userId
+        ) 
+            {
+            id
+            firstName
+            lastName
+            hotelName
+            arrivalDate
+            departureDate
+            confirmed
+            userId
         }
     }
 `
@@ -55,7 +82,72 @@ class ModalView extends Component
             lastName: '',
             email: '',
         }
+        this._handleChangeInput = this._handleChangeInput.bind(this);
+        this._setArrival = this._setArrival.bind(this);
+        this._setDeparture = this._setDeparture.bind(this);
     }
+
+    async _handleSubmit()
+    {
+        await this.props.User({
+            variables:
+            {
+                email: this.state.email,
+                
+            }
+        }).then(res => {
+            console.log(res)
+        }).catch(err => {
+            Alert.alert(err.message)
+        })
+
+        await this.props.Reservation({
+            variables:
+            {
+                firstName: 'alexander',
+                lastName: this.state.lastName,
+                hotelName: this.props.hotelName,
+                arrivalDate: this.state.arrival,
+                departureDate: this.state.departure,
+                confirmed: true
+            }
+        }).then(res => {
+            console.log(res)
+            Alert.alert(`Your reservation of id `)
+        }).catch(err => {
+            err
+            Alert.alert(err.message)
+        })
+        
+    }
+
+    _handleChangeInput(event, target)
+    {
+        console.log(this.state)
+        this.setState({[target]: event})
+    }
+
+    _setArrival(newDate) 
+    {
+        this.setState({
+            arrival: newDate
+        })
+    }
+
+    _setDeparture(newDate) 
+    {
+        this.setState({
+            departure: newDate
+        })
+    }
+
+    componentDidMount()
+    {
+        setTimeout(() => {
+            console.log(this.props)
+        }, 2000)
+    }
+
     render() 
     {
         return (
@@ -76,31 +168,37 @@ class ModalView extends Component
                             <View style={{marginTop: 3}}>
                                 
                                 <Input
-                                    placeholder="First Name"
-                                    value={this.state.firstName}
                                     name={'firstName'}
+                                    value={this.state.firstName}
+                                    placeholder={"First Name"}
                                     onChange={(event) => this._handleChangeInput(event, 'firstName')}
                                 />
                                 <Input 
-                                    placeholder={"Last Name"}
+                                    name={'lastName'}
                                     value={this.state.lastName}
-                                    name={'password'}
-                                    onChange={(event) => this._handleChangeInput(event, 'password')}
+                                    placeholder={"Last Name"}
+                                    onChange={(event) => this._handleChangeInput(event, 'lastName')}
                                     marginTop={13}
                                 />
-                                <Input 
+                                <Input
+                                    name={'email'}
+                                    value={this.state.email}
+                                    keyboardType={'email-address'}
                                     placeholder={"Email Address"}
+                                    onChange={(event) => this._handleChangeInput(event, 'email')}
                                     marginTop={23}
                                 />
                                 <Text style={styles.label}>Date of Arrival</Text>
-                                <DatePickerIOS 
+                                <DatePickerIOS
                                     date={this.state.arrival}
                                     mode={'date'}
+                                    onDateChange={this._setArrival}
                                 />
-                                <Text style={styles.label}>Date of Arrival</Text>
+                                <Text style={styles.label}>Date of Departure</Text>
                                 <DatePickerIOS 
                                     date={this.state.departure}
                                     mode={'date'}
+                                    onDateChange={this._setDeparture}
                                 />
                             </View>
                             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -115,7 +213,7 @@ class ModalView extends Component
                                 </Button>
                             </View>
                             <View style={{marginTop: 23, marginBottom: 23}}>
-                                <Button onPress={() => this.props.navigation.navigate('Home')}
+                                <Button onPress={() => this._handleSubmit()}
                                         width={125}
                                         paddingLeft={5}
                                         paddingRight={5}
@@ -153,4 +251,7 @@ const styles = StyleSheet.create({
 
 })
 
-export default ModalView
+export default compose(
+    graphql(User, {name: 'User'}),
+    graphql(Reservation, {name: 'Reservation'})
+)(ModalView)

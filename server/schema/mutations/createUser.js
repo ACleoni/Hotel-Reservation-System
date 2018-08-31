@@ -17,9 +17,10 @@ module.exports = {
     resolve: async(obj, { email }, { res }) => {
         try 
         {
-            await UserService._createUser(email);
-            return { email };
-        } 
+            const { id } = await UserService._createUser(email);
+            
+            return {id, email }
+        }
         catch (err) 
         {
             throw err;

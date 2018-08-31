@@ -81,19 +81,19 @@ class Feed extends Component
 
     _renderHotelList()
     {
-        return <Query query={getHotelListQuery} variables={{latitude: this.state.latitude , longitude: this.state.longitude}}>
+        return <Query query={getHotelListQuery} variables={{latitude: "33.7924134" , longitude: "-84.2866816"}}>
             {({ loading, error, data, refetch, networkStatus }) => {
             if (loading) {
-                console.log(data)
+                // console.log(data)
                 return <View>
                     <Text>loading</Text>
                 </View>
             } else
                 return data.hotelByCoord.hotelList.map((hotel, index) => {
                     return (
-                        <View style={styles.cardSection} key={index}>
-                            <View style={{height: 105, width: width / 1.1, flexDirection: 'row', alignItems: 'flex-start', justifyContent: "space-between"}}>
-                                <View style={{ flexDirection: 'column', alignItems: 'flex-start', height: 60, width: width * .5,  paddingTop: 10}}>
+                        <View style={styles.cardContainer} key={index}>
+                            <View style={styles.cardSection}>
+                                <View style={styles.card}>
                                     <Text style={{ fontSize: 20, fontWeight: '400', opacity: 0.98, color: 'black' }}>{hotel.name}</Text>
                                     <View style={{ flexDirection: 'row'}}>
                                         <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>{hotel.city}, {hotel.state}</Text>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
     },
-    cardSection: {
+    cardContainer: {
         flex: 1,
         alignItems: 'center',     
         borderRadius: 5,
@@ -177,6 +177,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderColor: '#ddd',
         position: 'relative',
+    },
+    cardSection: 
+    {
+        height: 105, 
+        width: width / 1.1, 
+        flexDirection: 'row', 
+        alignItems: 'flex-start', 
+        justifyContent: "space-between"
+    },
+    card: 
+    { 
+        flexDirection: 'column', 
+        alignItems: 'flex-start', 
+        height: 60, 
+        width: width * .5,  
+        paddingTop: 10
     }
 });
 

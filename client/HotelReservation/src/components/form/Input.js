@@ -39,7 +39,7 @@ class Input extends Component
                     onFocus={this.props.onFocus}
                     onBlur={this.props.onBlur}
                     onKeyPress={this.onKeyPress}
-                    onChangeText={this.props.onChangeText}
+                    onChangeText={this.props.onChange}
                     secureTextEntry={this.props.secureTextEntry}
                     underlineColorAndroid={'rgba(0,0,0,0)'}
                     style={style}
