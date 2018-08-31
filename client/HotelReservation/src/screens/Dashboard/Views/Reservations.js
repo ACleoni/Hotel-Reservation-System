@@ -8,8 +8,8 @@ import { gql } from 'apollo-boost';
 import { graphql, compose } from 'react-apollo';
 
 
-const getReservationById = gql `
-query ResById($id: String!){
+const resById = gql `
+query ($id: String!){
 	resById(id: $id) 
     {
         id
@@ -39,10 +39,20 @@ class Reservations extends Component
         this.setState({[target]: event})
     }
 
-    _checkValue()
+    async _checkValue()
     {
         let atSign = '@';
-        this.state.value.includes(atSign) ? this._renderReservationsByEmail() : this._renderReservationByID();
+        this.state.value.includes(!atSign) ? 
+        await this.props.resById({
+            variables:
+            {
+                id: 1
+            }
+        }).then(res => {
+            console.log(res)
+        }) 
+        
+        : null;
     }
 
     componentDidMount() 
@@ -84,6 +94,6 @@ const styles = StyleSheet.create({
 });
 
 export default compose(
-    graphql(getReservationById, {name: 'ResById'}),
-    // graphql(ReservationsByEmail, {name: 'ReservationByEmail'})
+    graphql(resById, {name: 'Id'}),
+    graphql(resByUser, {name: 'User'})
 )(Reservations)

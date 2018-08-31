@@ -2,7 +2,9 @@ const { user, reservation, hotel } = require('../models').sequelize.models;
 const validator = require('validator');
 const compare = require('compare-lat-lon');
 
-
+// Everything in the UserService class handles information from the GraphQL schema and returns data depending
+// on the queries or mutations that are requested by the user. All information is stored in a database using postgres and sequelize.
+// Queries being made are pulled from the database and returned to the client.
 
 class UserService
 {
