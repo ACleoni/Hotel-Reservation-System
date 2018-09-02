@@ -95,5 +95,5 @@ const styles = StyleSheet.create({
 
 export default compose(
     graphql(resById, {name: 'Id'}),
-    graphql(resByUser, {name: 'User'})
+    // graphql(resByUser, {name: 'User'})
 )(Reservations)

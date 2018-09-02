@@ -4,6 +4,7 @@ const
     GraphQLString,
     GraphQLNonNull,
     GraphQLID,
+    GraphQLInt,
     GraphQLBoolean
 } = require('graphql');
 
@@ -47,6 +48,11 @@ const ReservationType = new GraphQLObjectType({
         {
             type: new GraphQLNonNull(GraphQLBoolean),
             resolve: (obj) => obj.confirmed
+        },
+        userId:
+        {
+            type: new GraphQLNonNull(GraphQLInt),
+            resolve: (obj) => obj.userId
         }
     })
 })

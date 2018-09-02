@@ -39,13 +39,15 @@ const User = gql`
 `
 
 const Reservation = gql`
-    mutation ($firstName: String!, 
+    mutation (
+                $firstName: String!, 
                 $lastName: String!, 
                 $hotelName: String!, 
                 $arrivalDate: String!, 
                 $departureDate: String!
                 $confirmed: Boolean!
-                $userId: Integer!
+                $userId: Int!
+                
             ) 
         {
         createReservation(
@@ -55,7 +57,8 @@ const Reservation = gql`
             arrivalDate: $arrivalDate, 
             departureDate: $departureDate
             confirmed: $confirmed
-            userId: userId
+            userId: $userId
+            
         ) 
             {
             id
@@ -65,7 +68,6 @@ const Reservation = gql`
             arrivalDate
             departureDate
             confirmed
-            userId
         }
     }
 `
@@ -81,6 +83,7 @@ class ModalView extends Component
             firstName: '',
             lastName: '',
             email: '',
+            userId: ''
         }
         this._handleChangeInput = this._handleChangeInput.bind(this);
         this._setArrival = this._setArrival.bind(this);
@@ -96,7 +99,9 @@ class ModalView extends Component
                 
             }
         }).then(res => {
-            console.log(res)
+            this.setState({
+                userId: res.data.createUser.id
+            })
         }).catch(err => {
             Alert.alert(err.message)
         })
@@ -104,16 +109,23 @@ class ModalView extends Component
         await this.props.Reservation({
             variables:
             {
-                firstName: 'alexander',
+                firstName: this.state.firstName,
                 lastName: this.state.lastName,
                 hotelName: this.props.hotelName,
                 arrivalDate: this.state.arrival,
                 departureDate: this.state.departure,
-                confirmed: true
+                confirmed: true,
+                userId: this.state.userId
             }
         }).then(res => {
-            console.log(res)
-            Alert.alert(`Your reservation of id ${res.id} `)
+            Alert.alert(
+                'Reservation Confirmed',
+                `Your reservation for ${this.props.hotelName} is reserved under the name ${this.state.firstName} ${this.state.lastName} with and ID of ${res.data.createReservation.id}.`,
+                [
+                    {text: 'Continue', onPress: () => this.props._handleCloseModal()},
+                ],
+                { cancelable: false }
+            )
         }).catch(err => {
             err
             Alert.alert(err.message)
