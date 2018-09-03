@@ -92,6 +92,7 @@ class ModalView extends Component
 
     async _handleSubmit()
     {
+        console.log(this.props)
         await this.props.User({
             variables:
             {

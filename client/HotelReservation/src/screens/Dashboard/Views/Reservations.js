@@ -5,31 +5,50 @@ import React,
 } from 'react';
 import 
 {
-    View, 
+    Dimensions,
+    View,
+    ScrollView,
     Text,
     ActivityIndicator, 
-    StyleSheet, 
-    TouchableOpacity
+    StyleSheet
 } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 import  { FormInput } from 'react-native-elements';
 
 import { gql } from 'apollo-boost';
-import { graphql, compose, Query } from 'react-apollo';
+import { Query } from 'react-apollo';
+import Button from '../../../components/form/Button';
 
 
-const getReservationsById = gql`
-query ResById($id: Int!){
-	resById(id: $id) 
+const ReservationsByUserEmail = gql`
+    query ResByUser($email: String!)
     {
-        id
-        firstName
-        lastName
-        hotelName
-        arrivalDate
-        departureDate
+        resByUser(email: $email) 
+        {
+            reservationList 
+            {
+                id
+                firstName
+                lastName
+                hotelName
+                arrivalDate
+                departureDate
+                confirmed
+            }
+        }
     }
-}
+`
+
+const ReservationsById = gql`
+    query ResById($id: String!) 
+    {
+        resById(id: $id) 
+        {
+		    id 
+        }
+    }
 `
 
 class Reservations extends Component 
@@ -39,8 +58,7 @@ class Reservations extends Component
             super(props);
             this.state = {
                 value: '',
-                queryByEmail: false,
-                querybyId: false
+                includesAtSign: false
             }
             this._handleChange = this._handleChange.bind(this);
             this._checkValue = this._checkValue.bind(this);
@@ -54,51 +72,70 @@ class Reservations extends Component
     _checkValue()
     {
         let atSign = '@';
-        // this.state.value.includes(atSign)  ? this.setState({ 
-        //                                         queryByEmail: true, 
-        //                                         querybyId: false 
-        //                                     })
-        //                                     : this.setState({
-        //                                         queryByEmail: false,
-        //                                         querybyId: true
-        //                                     }) 
+        console.log(this.state.value)
+        this.state.value.includes(atSign)  ? this.setState({ 
+                                                includesAtSign: true 
+                                            })
+                                            : this.setState({
+                                                includesAtSign: false
+                                            }) 
     }
 
-    async _queryById()
+    _queryById()
     {
-        return <Query query={getReservationsById} variables={{email: 'alexander.cleoni@gmail.com'}}>
+        return <Query query={ReservationsById} variables={{id: 1}}>
             {({ loading, error, data, refetch, networkStatus }) => {
             if (loading) {
                 return <View style={styles.loaderContainer}>
                             <ActivityIndicator size="large" color="#000" />
                         </View>
             } else
-                return data.resByEmail.map((hotel, index) => {
+                    console.log(data)
+                    return (
+                        <View style={styles.cardContainer}>
+                            <View style={styles.cardSection}>
+                                <View style={styles.card}>
+                                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{}</Text>
+                                    <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: </Text>
+                                    <View style={{ flexDirection: 'row'}}>
+                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: </Text>
+                                    </View>
+                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: </Text>
+                                </View>
+                            </View>
+                        </View>
+                    )
+            }}
+        </Query>
+    }
+
+    _queryByUser()
+    {
+        return <Query query={ReservationsByUserEmail} variables={{email: this.state.value}}>
+            {({ loading, error, data, refetch, networkStatus }) => {
+            if (loading) {
+                return <View style={styles.loaderContainer}>
+                            <ActivityIndicator size="large" color="#000" />
+                        </View>
+            } else if (!data) {
+                return  <Text style={{fontSize: 14, textAlign: 'center', fontStyle: 'italic'}}>
+                            No Reservations found for this email address.
+                        </Text>
+            } else
+                return data.resByUser.reservationList.map((reservation, index) => {
+                    const arrival = new Date(reservation.arrivalDate).toDateString()
+                    const departure = new Date(reservation.departureDate).toDateString()
                     return (
                         <View style={styles.cardContainer} key={index}>
                             <View style={styles.cardSection}>
                                 <View style={styles.card}>
-                                    <Text style={{ fontSize: 20, fontWeight: '400', opacity: 0.98, color: 'black' }}>{hotel.name}</Text>
+                                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{reservation.hotelName}</Text>
+                                    <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: {reservation.firstName} {reservation.lastName}</Text>
                                     <View style={{ flexDirection: 'row'}}>
-                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>{hotel.city}, {hotel.state}</Text>
+                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: {arrival} - {departure}</Text>
                                     </View>
-                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>{hotel.availRooms} rooms left</Text>
-                                    
+                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: {reservation.id}</Text>
                                 </View>
-
-                                <View style={{height: '100%', justifyContent: 'space-around', }}>
-                                    <View>
-                                        <Text style={{ fontSize: 22, color: 'black', marginTop: 1, paddingTop: 2}}>{hotel.startingPrice}</Text>
-                                        <Text style={{ fontSize: 14, color: 'black', marginTop: 1}}>Avg price per night</Text>
-                                    </View>
-                                    <TouchableOpacity onPress={() => this._handleModalVisible(hotel.name)}>
-                                        <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#3ab71d', flex: 0, borderRadius: 0, width: 120, height: 30, borderRadius: 5}}>
-                                            <Text style={{fontSize: 14, color: '#fff'}}>
-                                                Reserve Now
-                                            </Text>
-                                        </View>  
-                                    </TouchableOpacity> 
-                                </View>  
                             </View>
                         </View>
                     )
@@ -109,10 +146,7 @@ class Reservations extends Component
 
     componentDidMount() 
     {
-        console.log('Mounting')
-        setTimeout(() => {
-            console.log(this.props)
-        }, 2000)
+        // this._queryByUser()
     }
 
     render() {
@@ -120,9 +154,14 @@ class Reservations extends Component
             <View>
                 <FormInput
                     value={this.state.value}
-                    onSubmitEditing={this._checkValue()}
+                    autoCapitalize={'none'}
+                    placeholder={'Enter your email or your Reservation ID'}
+                    onSubmitEditing={this._checkValue}
                     onChangeText={(event) => this._handleChange(event, 'value')}
                 />
+                <ScrollView style={{height: height / 1.3, margin: 5}}>
+                    {this.state.includesAtSign ? this._queryByUser() : this._queryById()}
+                </ScrollView>
             </View>
         );
     }
@@ -136,18 +175,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
     },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
+    cardContainer: {
         margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
+        backgroundColor: 'whitesmoke',
+        padding: 10,
+        borderRadius: 5,
+        width: width / 1.1,
+        alignSelf: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        shadowOffset: 
+        {
+            height: 1,
+            width: 1
+        }
+    }
 });
 
-export default compose(
-    graphql(getReservationsById, {name: 'ResById'})
-)(Reservations)
+export default Reservations
