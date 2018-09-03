@@ -2,21 +2,20 @@ const UserService = require("../../service/UserService");
 const { UserType } = require('../types');
 const
 {
-    GraphQLString,
-    GraphQLID
+    GraphQLString
 } = require('graphql');
 
 module.exports = {
     type: UserType,
     args: 
     { 
-        id: 
+        email: 
         { 
-            type: GraphQLID
+            type: GraphQLString
         } 
     },
-    resolve: async(obj, { id }, { res }) => {
-        const reservationList = await UserService._getAllReservationsByEmail(id);
+    resolve: async(obj, { email }, { res }) => {
+        const reservationList = await UserService._getAllReservationsByEmail(email);
         return reservationList;
     }
 }

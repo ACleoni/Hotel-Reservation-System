@@ -1,15 +1,25 @@
 
-import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import  {Button, FormInput} from 'react-native-elements';
+import React, 
+{
+    Component
+} from 'react';
+import 
+{
+    View, 
+    Text,
+    ActivityIndicator, 
+    StyleSheet, 
+    TouchableOpacity
+} from 'react-native';
+
+import  { FormInput } from 'react-native-elements';
 
 import { gql } from 'apollo-boost';
-import { graphql, compose } from 'react-apollo';
+import { graphql, compose, Query } from 'react-apollo';
 
 
-const resById = gql `
-query ($id: String!){
+const getReservationsById = gql`
+query ResById($id: Int!){
 	resById(id: $id) 
     {
         id
@@ -28,7 +38,9 @@ class Reservations extends Component
         {
             super(props);
             this.state = {
-                value: ''
+                value: '',
+                queryByEmail: false,
+                querybyId: false
             }
             this._handleChange = this._handleChange.bind(this);
             this._checkValue = this._checkValue.bind(this);
@@ -39,25 +51,68 @@ class Reservations extends Component
         this.setState({[target]: event})
     }
 
-    async _checkValue()
+    _checkValue()
     {
         let atSign = '@';
-        this.state.value.includes(!atSign) ? 
-        await this.props.resById({
-            variables:
-            {
-                id: 1
-            }
-        }).then(res => {
-            console.log(res)
-        }) 
-        
-        : null;
+        // this.state.value.includes(atSign)  ? this.setState({ 
+        //                                         queryByEmail: true, 
+        //                                         querybyId: false 
+        //                                     })
+        //                                     : this.setState({
+        //                                         queryByEmail: false,
+        //                                         querybyId: true
+        //                                     }) 
+    }
+
+    async _queryById()
+    {
+        return <Query query={getReservationsById} variables={{email: 'alexander.cleoni@gmail.com'}}>
+            {({ loading, error, data, refetch, networkStatus }) => {
+            if (loading) {
+                return <View style={styles.loaderContainer}>
+                            <ActivityIndicator size="large" color="#000" />
+                        </View>
+            } else
+                return data.resByEmail.map((hotel, index) => {
+                    return (
+                        <View style={styles.cardContainer} key={index}>
+                            <View style={styles.cardSection}>
+                                <View style={styles.card}>
+                                    <Text style={{ fontSize: 20, fontWeight: '400', opacity: 0.98, color: 'black' }}>{hotel.name}</Text>
+                                    <View style={{ flexDirection: 'row'}}>
+                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>{hotel.city}, {hotel.state}</Text>
+                                    </View>
+                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>{hotel.availRooms} rooms left</Text>
+                                    
+                                </View>
+
+                                <View style={{height: '100%', justifyContent: 'space-around', }}>
+                                    <View>
+                                        <Text style={{ fontSize: 22, color: 'black', marginTop: 1, paddingTop: 2}}>{hotel.startingPrice}</Text>
+                                        <Text style={{ fontSize: 14, color: 'black', marginTop: 1}}>Avg price per night</Text>
+                                    </View>
+                                    <TouchableOpacity onPress={() => this._handleModalVisible(hotel.name)}>
+                                        <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#3ab71d', flex: 0, borderRadius: 0, width: 120, height: 30, borderRadius: 5}}>
+                                            <Text style={{fontSize: 14, color: '#fff'}}>
+                                                Reserve Now
+                                            </Text>
+                                        </View>  
+                                    </TouchableOpacity> 
+                                </View>  
+                            </View>
+                        </View>
+                    )
+                })
+            }}
+        </Query>
     }
 
     componentDidMount() 
     {
-        // this.animation.play();
+        console.log('Mounting')
+        setTimeout(() => {
+            console.log(this.props)
+        }, 2000)
     }
 
     render() {
@@ -65,7 +120,7 @@ class Reservations extends Component
             <View>
                 <FormInput
                     value={this.state.value}
-                    onSubmitEditing={this._checkValue}
+                    onSubmitEditing={this._checkValue()}
                     onChangeText={(event) => this._handleChange(event, 'value')}
                 />
             </View>
@@ -94,6 +149,5 @@ const styles = StyleSheet.create({
 });
 
 export default compose(
-    graphql(resById, {name: 'Id'}),
-    // graphql(resByUser, {name: 'User'})
+    graphql(getReservationsById, {name: 'ResById'})
 )(Reservations)

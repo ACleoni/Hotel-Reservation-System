@@ -85,7 +85,6 @@ class Feed extends Component
         return <Query query={getHotelListQuery} variables={{latitude: "33.7924134" , longitude: "-84.2866816"}}>
             {({ loading, error, data, refetch, networkStatus }) => {
             if (loading) {
-                // console.log(data)
                 return <View style={styles.loaderContainer}>
                             <ActivityIndicator size="large" color="#000" />
                         </View>

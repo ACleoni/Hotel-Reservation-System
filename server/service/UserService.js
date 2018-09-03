@@ -65,17 +65,27 @@ class UserService
         }
     }
 
-    async _getAllReservationsByEmail(userId)
+    async _getAllReservationsByEmail(email)
     {
         try
         {
+            const userRecord = await user.find({ 
+                where: 
+                { 
+                    email 
+                } 
+            });
+
+            if (!userRecord) throw "Unable to find requested email. Please try again."
+            
             const reservationRecord = await reservation.findAll({
                 where:
                 {
-                    userId
+                    userId: userRecord.dataValues.id
                 }
             })
             .then(res => {
+                if (res.length === 0) throw "No reservations found."
                 return new Promise((resolve, reject) => {
                     let reservationList = [];
                     for(let i=0; i < res.length; i++) 

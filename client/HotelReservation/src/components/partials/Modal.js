@@ -135,7 +135,6 @@ class ModalView extends Component
 
     _handleChangeInput(event, target)
     {
-        console.log(this.state)
         this.setState({[target]: event})
     }
 
@@ -151,13 +150,6 @@ class ModalView extends Component
         this.setState({
             departure: newDate
         })
-    }
-
-    componentDidMount()
-    {
-        setTimeout(() => {
-            console.log(this.props)
-        }, 2000)
     }
 
     render() 
