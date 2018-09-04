@@ -6,9 +6,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Node.js 8.x or higher
-Create-React-Native-App
-Xcode
+Node.js 8.x or higher <br />
+Create-React-Native-App <br />
+Xcode <br />
 
 Node can be installed by downloading the package from https://nodejs.org/en/.
 Xcode can be installed from https://developer.apple.com/xcode/
