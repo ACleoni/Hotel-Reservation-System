@@ -6,6 +6,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
+Created with react-native init. <br />
+
 Node.js 8.x or higher <br />
 Create-React-Native-App <br />
 Xcode <br />
