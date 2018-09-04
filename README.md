@@ -56,12 +56,12 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [React-Native](https://facebook.github.io/react-native/) - Framework for building native mobile apps with JavaScript and React
-* [Babel](https://maven.apache.org/) - Dependency Management
-* [Node.js](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-* [React-Native](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Babel](https://maven.apache.org/) - Dependency Management
-* [Node.js](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [React-Native](https://facebook.github.io/react-native/) - Framework for building native mobile apps using JavaScript and React
+* [Node.js](https://nodejs.org/en/) - Javascript runtime engine for running server-side code
+* [Express.js](https://expressjs.com/) - Node.js web application framework
+* [PostgreSQL](https://www.postgresql.org/docs/) - Object-relational database system
+* [PostgreSQL](https://devcenter.heroku.com/) - App hosting service for Node.js and Postgres Database
+
 
 ## Contributing
 
