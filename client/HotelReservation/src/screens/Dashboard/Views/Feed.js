@@ -52,8 +52,8 @@ class Feed extends Component
         this.state = {
             modalVisible: false,
             selectedHotel: '',
-            latitude: null,
-            longitude: null,
+            latitude: "33.7924134", 
+            longitude: "-84.2866816",
             error: null
         }
         this._handleCloseModal = this._handleCloseModal.bind(this);
@@ -82,9 +82,10 @@ class Feed extends Component
 
     _renderHotelList()
     {
-        return <Query query={getHotelListQuery} variables={{latitude: "33.7924134" , longitude: "-84.2866816"}}>
+        return <Query query={getHotelListQuery} variables={{latitude: this.state.latitude , longitude: this.state.longitude}}>
             {({ loading, error, data, refetch, networkStatus }) => {
-            if (loading) {
+            if (loading) 
+            {
                 return <View style={styles.loaderContainer}>
                             <ActivityIndicator size="large" color="#000" />
                         </View>
@@ -94,22 +95,22 @@ class Feed extends Component
                         <View style={styles.cardContainer} key={index}>
                             <View style={styles.cardSection}>
                                 <View style={styles.card}>
-                                    <Text style={{ fontSize: 20, fontWeight: '400', opacity: 0.98, color: 'black' }}>{hotel.name}</Text>
-                                    <View style={{ flexDirection: 'row'}}>
-                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>{hotel.city}, {hotel.state}</Text>
+                                    <Text style={styles.cardHeader}>{hotel.name}</Text>
+                                    <View style={styles.locationContainer}>
+                                        <Text style={styles.location}>{hotel.city}, {hotel.state}</Text>
                                     </View>
-                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>{hotel.availRooms} rooms left</Text>
+                                    <Text style={styles.rooms}>{hotel.availRooms} rooms left</Text>
                                     
                                 </View>
 
-                                <View style={{height: '100%', justifyContent: 'space-around', }}>
+                                <View style={styles.btmHalfContainer}>
                                     <View>
-                                        <Text style={{ fontSize: 22, color: 'black', marginTop: 1, paddingTop: 2}}>{hotel.startingPrice}</Text>
-                                        <Text style={{ fontSize: 14, color: 'black', marginTop: 1}}>Avg price per night</Text>
+                                        <Text style={styles.price}>{hotel.startingPrice}</Text>
+                                        <Text style={styles.priceText}>Avg price per night</Text>
                                     </View>
                                     <TouchableOpacity onPress={() => this._handleModalVisible(hotel.name)}>
-                                        <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#3ab71d', flex: 0, borderRadius: 0, width: 120, height: 30, borderRadius: 5}}>
-                                            <Text style={{fontSize: 14, color: '#fff'}}>
+                                        <View style={styles.btnContainer}>
+                                            <Text style={styles.btnText}>
                                                 Reserve Now
                                             </Text>
                                         </View>  
@@ -199,6 +200,65 @@ const styles = StyleSheet.create({
         height: 60, 
         width: width * .5,  
         paddingTop: 10
+    },
+    cardHeader:
+    { 
+        fontSize: 20, 
+        fontWeight: '400', 
+        opacity: 0.98, 
+        color: 'black' 
+    },
+    locationContainer:
+    {
+        flexDirection: 'row'
+    },
+    location:
+    {
+        paddingBottom: 10, 
+        fontSize: 16, 
+        color: 'black', 
+        marginTop: 1, 
+        fontWeight: '200'
+    },
+    rooms:
+    { 
+        fontSize: 14, 
+        color: 'black', 
+        marginTop: 1
+    },
+    btmHalfContainer:
+    {
+        height: '100%', 
+        justifyContent: 'space-around'
+    },
+    price:
+    { 
+        fontSize: 22, 
+        color: 'black', 
+        marginTop: 1, 
+        paddingTop: 2
+    },
+    priceText:
+    { 
+        fontSize: 14, 
+        color: 'black', 
+        marginTop: 1
+    },
+    btnContainer:
+    {
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        backgroundColor: '#3ab71d', 
+        flex: 0, 
+        borderRadius: 0, 
+        width: 120, 
+        height: 30, 
+        borderRadius: 5
+    },
+    btnText:
+    {
+        fontSize: 14, 
+        color: '#fff'
     }
 });
 
