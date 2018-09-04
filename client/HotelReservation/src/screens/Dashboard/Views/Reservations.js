@@ -19,7 +19,6 @@ import  { FormInput } from 'react-native-elements';
 
 import { gql } from 'apollo-boost';
 import { Query } from 'react-apollo';
-import Button from '../../../components/form/Button';
 
 
 const ReservationsByUserEmail = gql`
@@ -35,18 +34,22 @@ const ReservationsByUserEmail = gql`
                 hotelName
                 arrivalDate
                 departureDate
-                confirmed
             }
         }
     }
 `
 
 const ReservationsById = gql`
-    query ResById($id: String!) 
+    query ResById($id: ID!) 
     {
         resById(id: $id) 
         {
-		    id 
+            id
+            firstName
+            lastName
+            hotelName
+            arrivalDate
+            departureDate
         }
     }
 `
@@ -61,7 +64,7 @@ class Reservations extends Component
                 includesAtSign: false
             }
             this._handleChange = this._handleChange.bind(this);
-            this._checkValue = this._checkValue.bind(this);
+            this._handleQuery = this._handleQuery.bind(this);
         }
     
     _handleChange(event , target) 
@@ -69,84 +72,84 @@ class Reservations extends Component
         this.setState({[target]: event})
     }
 
-    _checkValue()
-    {
-        let atSign = '@';
-        console.log(this.state.value)
-        this.state.value.includes(atSign)  ? this.setState({ 
-                                                includesAtSign: true 
-                                            })
-                                            : this.setState({
-                                                includesAtSign: false
-                                            }) 
-    }
+    _handleQuery()
+    {  
+        const numericArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-    _queryById()
-    {
-        return <Query query={ReservationsById} variables={{id: 1}}>
-            {({ loading, error, data, refetch, networkStatus }) => {
-            if (loading) {
-                return <View style={styles.loaderContainer}>
-                            <ActivityIndicator size="large" color="#000" />
-                        </View>
-            } else
-                    console.log(data)
-                    return (
-                        <View style={styles.cardContainer}>
-                            <View style={styles.cardSection}>
-                                <View style={styles.card}>
-                                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{}</Text>
-                                    <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: </Text>
-                                    <View style={{ flexDirection: 'row'}}>
-                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: </Text>
+        for (i=0; i < numericArray.length; i++) 
+        {
+            if (this.state.value.includes(numericArray[i])) 
+            {
+                return ( 
+                    <Query query={ReservationsById} variables={{id: this.state.value}}>
+                            {({ loading, error, data, refetch, networkStatus }) => {
+                            if (loading) 
+                            {
+                                return <View style={styles.loaderContainer}>
+                                            <ActivityIndicator size="large" color="#000" />
+                                        </View>
+                            } else if (error)
+                            {
+                                return <Text>
+                                            {/* Slices the portion of the error that says GraphQLError and simply just displays the message */}
+                                            {error.message.slice(14)}
+                                        </Text>
+                            } else
+                                return (
+                                    <View style={styles.cardContainer}>
+                                        <View style={styles.cardSection}>
+                                            <View style={styles.card}>
+                                                <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{data.resById.hotelName}</Text>
+                                                <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: </Text>
+                                                <View style={{ flexDirection: 'row'}}>
+                                                    <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: </Text>
+                                                </View>
+                                                <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: {data.resById.id} </Text>
+                                            </View>
+                                        </View>
                                     </View>
-                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: </Text>
-                                </View>
-                            </View>
-                        </View>
-                    )
-            }}
-        </Query>
-    }
-
-    _queryByUser()
-    {
-        return <Query query={ReservationsByUserEmail} variables={{email: this.state.value}}>
-            {({ loading, error, data, refetch, networkStatus }) => {
-            if (loading) {
-                return <View style={styles.loaderContainer}>
-                            <ActivityIndicator size="large" color="#000" />
-                        </View>
-            } else if (!data) {
-                return  <Text style={{fontSize: 14, textAlign: 'center', fontStyle: 'italic'}}>
-                            No Reservations found for this email address.
-                        </Text>
-            } else
-                return data.resByUser.reservationList.map((reservation, index) => {
-                    const arrival = new Date(reservation.arrivalDate).toDateString()
-                    const departure = new Date(reservation.departureDate).toDateString()
-                    return (
-                        <View style={styles.cardContainer} key={index}>
-                            <View style={styles.cardSection}>
-                                <View style={styles.card}>
-                                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{reservation.hotelName}</Text>
-                                    <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: {reservation.firstName} {reservation.lastName}</Text>
-                                    <View style={{ flexDirection: 'row'}}>
-                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: {arrival} - {departure}</Text>
-                                    </View>
-                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: {reservation.id}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    )
-                })
-            }}
-        </Query>
-    }
-
-    componentDidMount() 
-    {
-        // this._queryByUser()
+                                )
+                            }}
+                    </Query>
+                )
+            } else if (emailRegex.test(this.state.value))
+            {
+                return (
+                    <Query query={ReservationsByUserEmail} variables={{email: this.state.value}}>
+                        {({ loading, error, data, refetch, networkStatus }) => {
+                            if (loading) {
+                                return <View style={styles.loaderContainer}>
+                                            <ActivityIndicator size="large" color="#000" />
+                                        </View>
+                            } else if (error) {
+                                return  <Text style={{fontSize: 14, textAlign: 'center', fontStyle: 'italic'}}>
+                                            {error.message.slice(14)}
+                                        </Text>
+                            } else          
+                                return data.resByUser.reservationList.map((reservation, index) => {
+                                    const arrival = new Date(reservation.arrivalDate).toDateString()
+                                    const departure = new Date(reservation.departureDate).toDateString()
+                                    return (
+                                        <View style={styles.cardContainer} key={index}>
+                                            <View style={styles.cardSection}>
+                                                <View style={styles.card}>
+                                                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{reservation.hotelName}</Text>
+                                                    <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: {reservation.firstName} {reservation.lastName}</Text>
+                                                    <View style={{ flexDirection: 'row'}}>
+                                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: {arrival} - {departure}</Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: {reservation.id}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    )
+                                })
+                            }}
+                    </Query>
+                )
+            }
+        }
     }
 
     render() {
@@ -156,11 +159,10 @@ class Reservations extends Component
                     value={this.state.value}
                     autoCapitalize={'none'}
                     placeholder={'Enter your email or your Reservation ID'}
-                    onSubmitEditing={this._checkValue}
                     onChangeText={(event) => this._handleChange(event, 'value')}
                 />
                 <ScrollView style={{height: height / 1.3, margin: 5}}>
-                    {this.state.includesAtSign ? this._queryByUser() : this._queryById()}
+                    {this._handleQuery()}
                 </ScrollView>
             </View>
         );
