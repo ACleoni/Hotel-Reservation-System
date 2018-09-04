@@ -1214,7 +1214,7 @@ babel-plugin-transform-es3-property-literals@^6.8.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-flow-strip-types@^6.21.0, babel-plugin-transform-flow-strip-types@^6.8.0:
+babel-plugin-transform-flow-strip-types@^6.21.0, babel-plugin-transform-flow-strip-types@^6.22.0, babel-plugin-transform-flow-strip-types@^6.8.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-6.22.0.tgz#84cb672935d43714fdc32bce84568d87441cf7cf"
   dependencies:
@@ -1311,6 +1311,12 @@ babel-preset-fbjs@^2.1.2, babel-preset-fbjs@^2.1.4:
     babel-plugin-transform-object-rest-spread "^6.8.0"
     babel-plugin-transform-react-display-name "^6.8.0"
     babel-plugin-transform-react-jsx "^6.8.0"
+
+babel-preset-flow@^6.23.0:
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/babel-preset-flow/-/babel-preset-flow-6.23.0.tgz#e71218887085ae9a24b5be4169affb599816c49d"
+  dependencies:
+    babel-plugin-transform-flow-strip-types "^6.22.0"
 
 babel-preset-jest@^23.2.0:
   version "23.2.0"
@@ -2284,6 +2290,10 @@ find-up@^2.0.0, find-up@^2.1.0:
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-2.1.0.tgz#45d1b7e506c717ddd482775a2b77920a3c0c57a7"
   dependencies:
     locate-path "^2.0.0"
+
+flow-bin@^0.80.0:
+  version "0.80.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.80.0.tgz#04cc1ee626a6f50786f78170c92ebe1745235403"
 
 for-in@^1.0.1, for-in@^1.0.2:
   version "1.0.2"

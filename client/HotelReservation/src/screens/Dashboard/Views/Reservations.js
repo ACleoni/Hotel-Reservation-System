@@ -205,7 +205,7 @@ class Reservations extends Component
                     placeholder={'Enter your email or your Reservation ID'}
                     onChangeText={(event) => this._handleChange(event, 'value')}
                 />
-                <ScrollView style={{height: height / 1.3, margin: 5}}>
+                <ScrollView style={styles.scrollView}>
                     {this._handleQuery()}
                 </ScrollView>
             </View>
@@ -221,6 +221,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#fff',
+    },
+    scrollView:
+    {
+        height: height / 1.3, 
+        margin: 5
     },
     cardContainer: 
     {
