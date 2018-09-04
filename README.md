@@ -20,6 +20,8 @@ yarn install or npm install
 After dependencies are installed run yarn or npm start to start the development server. Default port is 1337.
 ```
 
+Before running the app on the simulator you must sign the provisioning profile with your Apple Id in Xcode. The signing process can be found in the main directory under the General Tab. <br />
+
 Change directores to the client/HotelReservation folder and run the following commands
 ```
 yarn install or npm install
