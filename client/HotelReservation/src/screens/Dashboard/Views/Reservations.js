@@ -20,7 +20,10 @@ import  { FormInput } from 'react-native-elements';
 import { gql } from 'apollo-boost';
 import { Query } from 'react-apollo';
 
-
+/* 
+    Renders a list of reservations associated with a certain users id. The function will take an email as an input. Once the backend returns the proper data,
+    it will return the reservations list whos user id matches that of the id associated with the email that was entered.
+*/
 const ReservationsByUserEmail = gql`
     query ResByUser($email: String!)
     {
@@ -38,7 +41,9 @@ const ReservationsByUserEmail = gql`
         }
     }
 `
-
+/* Returns a single reservation if the user enters an id number. If no reservation exists for the id that is entered, a callback error will prompt the suer to
+    enter a different id.
+*/
 const ReservationsById = gql`
     query ResById($id: ID!) 
     {
@@ -50,6 +55,7 @@ const ReservationsById = gql`
             hotelName
             arrivalDate
             departureDate
+            confirmed
         }
     }
 `
@@ -69,6 +75,7 @@ class Reservations extends Component
     
     _handleChange(event , target) 
     {
+        // Listens for every keystroke and updates the state immediately
         this.setState({[target]: event})
     }
 
@@ -79,6 +86,7 @@ class Reservations extends Component
 
         for (i=0; i < numericArray.length; i++) 
         {
+            // Checks whether the input is a reservation ID
             if (this.state.value.includes(numericArray[i])) 
             {
                 return ( 
@@ -91,28 +99,49 @@ class Reservations extends Component
                                         </View>
                             } else if (error)
                             {
-                                return <Text>
-                                            {/* Slices the portion of the error that says GraphQLError and simply just displays the message */}
-                                            {error.message.slice(14)}
-                                        </Text>
-                            } else
-                                return (
+                                // Ignores certain error messages that are irrelevant for the user
+                                if (error.message.includes('integer'))
+                                {
+                                    return null
+                                } else 
+                                    return <Text>
+                                                {/* Slices the portion of the error that says GraphQLError: and simply just displays the message */}
+                                                {error.message.slice(14)}
+                                            </Text>
+                            } else {
+                                const arrival = new Date(data.resById.arrivalDate).toDateString()
+                                const departure = new Date(data.resById.departureDate).toDateString()
+                                return (     
                                     <View style={styles.cardContainer}>
                                         <View style={styles.cardSection}>
                                             <View style={styles.card}>
-                                                <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{data.resById.hotelName}</Text>
-                                                <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: </Text>
-                                                <View style={{ flexDirection: 'row'}}>
-                                                    <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: </Text>
+                                                <Text style={styles.cardHeader}>
+                                                    {data.resById.hotelName}
+                                                </Text>
+                                                {/* Separates hotel name from the users data */}
+                                                <View style={styles.cardLineBreak}></View>
+
+                                                <Text style={styles.userName}>
+                                                    Reserved for: {data.resById.firstName} {data.resById.lastName}
+                                                </Text>
+
+                                                <View style={styles.dateContainer}>
+                                                    <Text style={styles.date}>Arrival: {arrival}</Text>
+                                                    <Text style={styles.date}>Departure: {departure}</Text>
                                                 </View>
-                                                <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: {data.resById.id} </Text>
+                                                
+                                                <Text style={styles.resId}>
+                                                    Reservation ID: {data.resById.id} 
+                                                </Text>
                                             </View>
                                         </View>
                                     </View>
                                 )
                             }}
+                        }
                     </Query>
                 )
+            // Checks if the input is a users email
             } else if (emailRegex.test(this.state.value))
             {
                 return (
@@ -134,12 +163,25 @@ class Reservations extends Component
                                         <View style={styles.cardContainer} key={index}>
                                             <View style={styles.cardSection}>
                                                 <View style={styles.card}>
-                                                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: '400', opacity: 0.98, color: 'black' }}>{reservation.hotelName}</Text>
-                                                    <Text style={{ fontSize: 18, fontWeight: '400', opacity: 0.98, color: 'black', marginTop: 10, marginBottom: 5 }}>Reserved for: {reservation.firstName} {reservation.lastName}</Text>
-                                                    <View style={{ flexDirection: 'row'}}>
-                                                        <Text style={{paddingBottom: 10, fontSize: 16, color: 'black', marginTop: 1, fontWeight: '200'}}>From: {arrival} - {departure}</Text>
+                                                    <Text style={styles.cardHeader}>
+                                                        {reservation.hotelName}
+                                                    </Text>
+
+                                                    {/* Separates hotel name from the users data */}
+                                                    <View style={styles.cardLineBreak}></View>
+
+                                                    <Text style={styles.userName}>
+                                                        Reserved for: {reservation.firstName} {reservation.lastName}
+                                                    </Text>
+
+                                                    <View style={styles.dateContainer}>
+                                                        <Text style={styles.date}>Arrival: {arrival}</Text>
+                                                        <Text style={styles.date}>Departure: {departure}</Text>
                                                     </View>
-                                                    <Text style={{ fontSize: 14, color: 'black', marginTop: 1,}}>Reservation ID: {reservation.id}</Text>
+                                                
+                                                    <Text style={styles.resId}>
+                                                        Reservation ID: {reservation.id} 
+                                                    </Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -157,6 +199,8 @@ class Reservations extends Component
             <View>
                 <FormInput
                     value={this.state.value}
+                    keyboardType={'email-address'}
+                    autoCorrect={false}
                     autoCapitalize={'none'}
                     placeholder={'Enter your email or your Reservation ID'}
                     onChangeText={(event) => this._handleChange(event, 'value')}
@@ -171,13 +215,15 @@ class Reservations extends Component
 
 
 const styles = StyleSheet.create({
-    container: {
+    container: 
+    {
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#fff',
     },
-    cardContainer: {
+    cardContainer: 
+    {
         margin: 10,
         backgroundColor: 'whitesmoke',
         padding: 10,
@@ -192,6 +238,46 @@ const styles = StyleSheet.create({
             height: 1,
             width: 1
         }
+    },
+    cardHeader: 
+    { 
+        fontSize: 20, 
+        textAlign: 'center', 
+        fontWeight: '400',  
+        color: 'black' 
+    },
+    cardLineBreak:
+    {
+        height: 1, 
+        width: '98%', 
+        alignSelf: 'center', 
+        backgroundColor: '#000', 
+        marginVertical: 10 
+    },
+    userName:
+    { 
+        fontSize: 18, 
+        fontWeight: '400', 
+        opacity: 0.98, 
+        color: 'black', 
+        marginVertical: 10
+    },
+    dateContainer:
+    {
+        marginBottom: 10
+    },
+    date:
+    {
+        fontStyle: 'italic', 
+        fontSize: 16, 
+        color: '#000', 
+        fontWeight: '200'
+    },
+    resId:
+    {
+        fontSize: 14, 
+        color: 'black', 
+        marginTop: 1,
     }
 });
 
