@@ -190,6 +190,8 @@ class ModalView extends Component
                                     value={this.state.email}
                                     keyboardType={'email-address'}
                                     placeholder={"Email Address"}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
                                     onChange={(event) => this._handleChangeInput(event, 'email')}
                                     marginTop={23}
                                 />

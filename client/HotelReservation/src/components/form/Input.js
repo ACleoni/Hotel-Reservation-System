@@ -34,6 +34,8 @@ class Input extends Component
                     name={this.props.name}
                     value={this.props.value}
                     keyboardType={this.props.keyboardType}
+                    autoCorrect={this.props.autoCorrect}
+                    autoCapitalize={this.props.autoCapitalize}
                     placeholder={this.props.placeholder}
                     placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                     onFocus={this.props.onFocus}

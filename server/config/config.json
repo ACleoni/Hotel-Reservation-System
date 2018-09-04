@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "alexandercleoni",
-    "password": null,
-    "database": "hotel_database",
-    "host": "127.0.0.1",
+    "username": "aoduvtwbgwgmak",
+    "password": "d330c826525622321e74fdf4ceb98f2b59685ccd29a35754744a6084c7ef83ae",
+    "database": "d30nkrjlt3h82r",
+    "host": "24.30.58.233",
     "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "hotel_database",
-    "host": "127.0.0.1",
+    "username": "aoduvtwbgwgmak",
+    "password": "d330c826525622321e74fdf4ceb98f2b59685ccd29a35754744a6084c7ef83ae",
+    "database": "d30nkrjlt3h82r",
+    "host": "24.30.58.233",
     "dialect": "postgres"
   },
   "production": {
-    "username": "root",
-    "password": null,
+    "username": "aoduvtwbgwgmak",
+    "password": "d330c826525622321e74fdf4ceb98f2b59685ccd29a35754744a6084c7ef83ae",
     "database": "hotel_database",
-    "host": "127.0.0.1",
+    "host": "24.30.58.233",
     "dialect": "postgres"
   }
 }
