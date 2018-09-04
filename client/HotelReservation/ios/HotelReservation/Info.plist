@@ -26,19 +26,14 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>http://172.20.10.5:1337/graphql</key>
-			<dict>
-				<key>NSAllowsArbitraryLoads</key>
-				<true/>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
+			<key>localhost</key>
+			<string></string>
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>

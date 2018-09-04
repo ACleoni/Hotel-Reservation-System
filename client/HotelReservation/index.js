@@ -10,7 +10,7 @@ import { ApolloProvider } from 'react-apollo';
 
 // Apollo Client Setup
 const client = new ApolloClient({
-    uri: 'https://hotelreservationsystem.herokuapp.com/graphql'
+    uri: 'http://localhost:1337/graphql'
 })
 
 const AppContainer = () => {

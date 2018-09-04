@@ -3,21 +3,45 @@
     "username": "aoduvtwbgwgmak",
     "password": "d330c826525622321e74fdf4ceb98f2b59685ccd29a35754744a6084c7ef83ae",
     "database": "d30nkrjlt3h82r",
-    "host": "24.30.58.233",
-    "dialect": "postgres"
+    "host": "ec2-54-235-160-57.compute-1.amazonaws.com",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": true
+    },
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "idle": 10000
+    }
   },
   "test": {
     "username": "aoduvtwbgwgmak",
     "password": "d330c826525622321e74fdf4ceb98f2b59685ccd29a35754744a6084c7ef83ae",
     "database": "d30nkrjlt3h82r",
     "host": "24.30.58.233",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": true
+    },
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "idle": 10000
+    }
   },
   "production": {
     "username": "aoduvtwbgwgmak",
     "password": "d330c826525622321e74fdf4ceb98f2b59685ccd29a35754744a6084c7ef83ae",
-    "database": "hotel_database",
+    "database": "d30nkrjlt3h82r",
     "host": "24.30.58.233",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": true
+    },
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "idle": 10000
+    }
   }
 }
